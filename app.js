@@ -13,13 +13,17 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const local = require('passport-local');
 const User = require('./models/user');
-
+const dbUrl = process.env.DB_URL;
 const userRoutes = require('./routes/users')
 const campgroundsRoutes = require('./routes/campgrounds')
 const reviewsRoutes = require('./routes/reviews')
 
-mongoose.connect('mongodb://localhost:27017/YelpCamp');
+const MongoDBStore = require("connect-mongo")(session);
 
+const dbURL = 'mongodb://localhost:27017/YelpCamp';
+
+mongoose.connect(dbURL);
+// process.env.DB_URL
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
@@ -36,7 +40,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 
+const store = new MongoDBStore({
+    url: dbUrl,
+    secret: 'secret!',
+    touchAfter: 24 * 60 * 60
+})
+
+store.on("error", function (e) {
+    console.log("Session Store Error", e)
+})
+
 const sessionConfig = {
+    store,
+    name: 'session',
     secret: "secret!",
     resave: false,
     saveUninitialized: true,
