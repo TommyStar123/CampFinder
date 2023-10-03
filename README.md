@@ -4,6 +4,8 @@
 - Backend created using Express, Node.js, and MongoDB
 
 Here are two links to two video demos of the webpage and all of its features.
+
+
 ![This video](https://github.com/TommyStar123/CampFinder/assets/67210363/bab939d4-76af-496d-bc07-8f7e99efed4d) demonstrates the website as an unregistered user that is not logged in.
 
 
